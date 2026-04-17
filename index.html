@@ -31,46 +31,64 @@
     <header>
       <hgroup>
         <h1>The Pork Roll Paddle</h1>
-        <p>An endurance paddling trip. Join us on the river or host us on the banks.</p>
+        <p>A jaunt around the Garden State</p>
       </hgroup>
     </header>
 
+    <section id="why">
+      <h2>The Why</h2>
+      <p>Because it sounds cool! We're from NJ but haven't explored all that much of the state. What better way then to do it than a nice long paddle.</p>
+    </section>
+
     <section id="route">
       <h2>The Route</h2>
-      <p>Here is our planned track down the river.</p>
+      <p>We'll start in Port Jervis, paddle down the Delaware, around Cape May, and then up the coast through the bays. We'll be walking boat around the Point Pleasant Canal, and likely most of the way to Long Branch (don't worry we'll have wheels).</p>
       <div id="map"></div>
     </section>
 
-    <section id="faq">
-      <h2>FAQ</h2>
-      <details>
-        <summary>What are the exact dates?</summary>
-        <p>We are launching on August 9th and taking out on September 8th.</p>
-      </details>
-      <details>
-        <summary>What kind of boats are permitted?</summary>
-        <p>Any human-powered craft. Composite expedition canoes, kayaks, and SUPs are all welcome.</p>
-      </details>
+    <section id="route">
+      <h2>The Dates</h2>
+      <p>We're launching on August 9th and need to be done by September 8th (we have a wedding to get to... hopefully we won't be too burnt).</p>
     </section>
 
-    <section id="host-us">
-      <h2>Host Us / Camp with Us</h2>
-      <p>If you live along the route and wouldn't mind a few paddlers camping on your property, or if you want to join the fleet, let us know!</p>
-      
+    <section id="route">
+      <h2>The Ask</h2>
+      <p>There's not much camping along the way. If you live near the route and are open to letting some nice paddlers crash there for the night, please reach out. We're happy to camp in your yard and we promise to have some interesting stories :)
+
+      If this is something you are open to, or you just want to chat, fill out the old form below and I'll reach out to you.</p>
       <form action="https://formspree.io/f/mwvalyyr" method="POST">
         <label for="name">Name</label>
         <input type="text" id="name" name="name" required>
 
+        <label for="proploc">Where do you live?</label>
+        <textarea id="proploc" name="proploc"></textarea>
+
         <label for="email">Email</label>
         <input type="email" id="email" name="email" required>
 
-        <label for="message">Property Location / Message</label>
-        <textarea id="message" name="message" required></textarea>
+        <label for="phone">Phone number</label>
+        <input type="phone" id="phone" name="phone">
+	
+        <label for="proploc">What would you like us to know?</label>
+        <textarea id="proploc" name="proploc"></textarea>
 
-        <button type="submit">Reach Out</button>
+        <label for="message">How did you hear about this?</label>
+        <textarea id="message" name="message"></textarea>
+
+        <button type="submit">Become a pork roll hero!</button>
       </form>
     </section>
-
+    <section id="faq">
+      <h2>FAQ</h2>
+      <details>
+        <summary>You can't actually paddle around NJ.</summary>
+        <p>That's not really a question, but fair enough. Yes, we'll be hiking the norther section (on the Appalachian Trail), about 50 miles. But the other 500 miles are bordered by water - pretty neat.</p>
+      </details>
+      <details>
+        <summary>Will you be wearing sunscreen?</summary>
+        <p>Of course, we would never not wear sunscreen Mom.</p>
+      </details>
+    </section>
   </main>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
