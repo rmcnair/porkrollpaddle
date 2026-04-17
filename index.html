@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Pork Roll Paddle</title>
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+  
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  
+  <style>
+    #map { 
+      height: 400px; 
+      border-radius: 8px; 
+      margin-bottom: 2rem; 
+      z-index: 1; 
+    }
+    .leaflet-div-icon {
+      background: transparent !important;
+      border: none !important;
+    }
+    .leaflet-marker-icon:focus {
+      outline: none !important;
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    
+    <header>
+      <hgroup>
+        <h1>The Pork Roll Paddle</h1>
+        <p>An endurance paddling trip. Join us on the river or host us on the banks.</p>
+      </hgroup>
+    </header>
+
+    <section id="route">
+      <h2>The Route</h2>
+      <p>Here is our planned track down the river.</p>
+      <div id="map"></div>
+    </section>
+
+    <section id="faq">
+      <h2>FAQ</h2>
+      <details>
+        <summary>What are the exact dates?</summary>
+        <p>We are launching on August 9th and taking out on September 8th.</p>
+      </details>
+      <details>
+        <summary>What kind of boats are permitted?</summary>
+        <p>Any human-powered craft. Composite expedition canoes, kayaks, and SUPs are all welcome.</p>
+      </details>
+    </section>
+
+    <section id="host-us">
+      <h2>Host Us / Camp with Us</h2>
+      <p>If you live along the route and wouldn't mind a few paddlers camping on your property, or if you want to join the fleet, let us know!</p>
+      
+      <form action="https://formspree.io/f/mwvalyyr" method="POST">
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="message">Property Location / Message</label>
+        <textarea id="message" name="message" required></textarea>
+
+        <button type="submit">Reach Out</button>
+      </form>
+    </section>
+
+  </main>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    const map = L.map('map').setView([0, 0], 10); 
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '© OpenStreetMap'
+    }).addTo(map);
+
+    // Make sure your converted KML files are named exactly this in your folder
+    const routeFiles = ['prp.geojson'];
+    const routeGroup = L.featureGroup().addTo(map);
+
+    Promise.all(routeFiles.map(file => fetch(file).then(response => response.json())))
+      .then(allRoutesData => {
+        allRoutesData.forEach((data, index) => {
+          const lineColor = index === 0 ? '#e53935' : '#1e88e5'; 
+          L.geoJSON(data, {
+            style: function () {
+              return { color: lineColor, weight: 4, opacity: 0.8 };
+            },
+            pointToLayer: function (feature, latlng) {
+              const color = feature.properties['marker-color'] || '#7e57c2';
+              const symbol = feature.properties['marker-symbol'] || '';
+              
+              let iconInner = '<circle cx="15" cy="15" r="6" fill="white" opacity="0.8"/>';
+              if (symbol.includes('boat') || symbol.includes('canoe')) {
+                iconInner = `
+                  <path d="M5 18C5 18 10 21 15 21C20 21 25 18 25 18C25 18 20 16 15 16C10 16 5 18 5 18Z" fill="white" opacity="0.9"/>
+                  <path d="M10 12L20 24" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity="0.8"/>
+                  <circle cx="10" cy="12" r="1.5" fill="white" opacity="0.8"/>
+                  <circle cx="20" cy="24" r="1.5" fill="white" opacity="0.8"/>
+                `;
+              }
+              
+              const markerHtml = `
+                <svg width="30" height="42" viewBox="0 0 30 42" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M15 0C6.7 0 0 6.7 0 15c0 10.5 15 27 15 27s15-16.5 15-27c0-8.3-6.7-15-15-15z" fill="${color}" stroke="#fff" stroke-width="2"/>
+                  ${iconInner}
+                </svg>`;
+              
+              return L.marker(latlng, {
+                icon: L.divIcon({
+                  html: markerHtml,
+                  className: '',
+                  iconSize: [30, 42],
+                  iconAnchor: [15, 42],
+                  popupAnchor: [0, -35]
+                })
+              });
+            },
+            onEachFeature: function (feature, layer) {
+              if (feature.properties && feature.properties.name) {
+                layer.bindPopup(`<strong>${feature.properties.name}</strong>${feature.properties.title ? '<br>' + feature.properties.title : ''}`);
+              }
+            }
+          }).addTo(routeGroup);
+        });
+        map.fitBounds(routeGroup.getBounds());
+      })
+      .catch(error => console.error('Error loading the routes:', error));
+  </script>
+</body>
+</html>
