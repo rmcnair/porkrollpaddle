@@ -16,9 +16,11 @@
       margin-bottom: 2rem; 
       z-index: 1; 
     }
-    .leaflet-div-icon {
+    .leaflet-div-icon, .leaflet-div-icon svg {
       background: transparent !important;
       border: none !important;
+      box-shadow: none !important;
+      outline: none !important;
     }
     .leaflet-marker-icon:focus {
       outline: none !important;
@@ -31,31 +33,32 @@
     <header>
       <hgroup>
         <h1>The Pork Roll Paddle</h1>
-        <p>A jaunt around the Garden State</p>
+        <p>A jaunt around Jersey</p>
       </hgroup>
     </header>
 
-    <section id="why">
-      <h2>The Why</h2>
-      <p>Because it sounds fun! We're from NJ but haven't explored all that much of the state. What better way then to do it than a nice long paddle.</p>
-    </section>
-
-    <section id="route">
-      <h2>The Route</h2>
-      <p>We'll start in Port Jervis, paddle down the Delaware (by Philadelphia), around Cape May, up the coast through the bays, up the Hudson (by New York), up to Bear Mountain State Park. We'll drop the boat there, an hike back to Port Jervis on the Appalachian Trail. It will be about 500 miles paddling, 50 miles hiking. We'll be walking boat around the Point Pleasant Canal, and likely most of the way to Long Branch (don't worry we'll have wheels).</p>
+    <section id="what">
+      <h2>What?</h2>
+      <p>An Amy and Ryan concoction to paddle around NJ. We'll start from Port Jervis on the top-left of NJ, go down the Delaware and up the coast (through the bays) to the Hudson near the top-right of NJ. At Bear Mountain State Park, we'll drop the boat and hike back to Port Jervis on the Appalachian Trail (about 500 miles paddling, 65 miles hiking). If you live anywhere near the route (i.e. near the border or coast of NJ) and are open to letting us (Amy and Ryan) camp in your yard or stay in your house for a night, reach out below!</p>
       <div id="map"></div>
     </section>
 
     <section id="route">
-      <h2>The Dates</h2>
-      <p>We're launching on August 9th and need to be done by September 8th (we have a wedding to get to... hopefully we won't be too burnt).</p>
+      <h2>When?</h2>
+      <p>We're launching on August 9th, 2026 and need to be finished up by September 8th (ideally also 2026).</p>
     </section>
+
+    <section id="why">
+      <h2>Why?</h2>
+      <p>To explore our home state. To meet interesting people and see pretty places. To eat good italian food and cheesecake. To spend the month paddling. To avoid the Texas summer. To have an adventure. To have some fun.</p>
+    </section>
+
 
     <section id="route">
       <h2>The Ask</h2>
-      <p>There's not much camping along the way. If you live near the route and are open to letting some nice paddlers crash there for the night, please reach out. We're happy to camp in your yard and we promise to have some interesting stories :)
+      <p>There's not much camping along the way. If you live near the route and are open to letting us crash there for the night, please reach out. We're happy to camp in your yard and promise to have some interesting stories :)
 
-      If this is something you are open to, or you just want to chat, fill out the old form below and I'll reach out to you.</p>
+      If this is something you might be open to, fill out the old form below and I'll reach out.</p>
       <form action="https://formspree.io/f/mwvalyyr" method="POST">
         <label for="name">Name</label>
         <input type="text" id="name" name="name" required>
@@ -64,16 +67,13 @@
         <textarea id="proploc" name="proploc"></textarea>
 
         <label for="email">Email</label>
-        <input type="email" id="email" name="email" required>
+        <input type="email" id="email" name="email">
 
         <label for="phone">Phone number</label>
         <input type="phone" id="phone" name="phone">
 	
-        <label for="proploc">What would you like us to know?</label>
-        <textarea id="proploc" name="proploc"></textarea>
-
-        <label for="message">How did you hear about this?</label>
-        <textarea id="message" name="message"></textarea>
+        <label for="addt_info">Anything else we should know?</label>
+        <textarea id="addt_info" name="addt_info"></textarea>
 
         <button type="submit">Become a pork roll hero!</button>
       </form>
@@ -86,7 +86,7 @@
       </details>
       <details>
         <summary>How far is that?</summary>
-        <p>Something like 570 miles (~500 miles paddling, 65 walking)/</p>
+        <p>Something like 565 miles (~500 miles paddling, 65 walking)/</p>
       </details>
       <details>
         <summary>Will you be wearing sunscreen?</summary>
@@ -94,7 +94,7 @@
       </details>
       <details>
         <summary>What about the Point Pleasant Canal?</summary>
-        <p>Yup, we'll be walking boat around the Point Pleasant Canal, and likely most of the way to Long Branch (don't worry we'll have wheels).</p>
+        <p>We'll be taking our boat for a walk around the Point Pleasant Canal, and likely most of the way to Long Branch. I imagine we'll get some looks.</p>
       </details>
  
     </section>
@@ -102,6 +102,14 @@
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
+    // Define the custom icons
+    const iconSettings = {
+      iconSize: [32, 32], // Size of the icon in pixels
+      iconAnchor: [16, 32], // Which point of the icon corresponds to the exact GPS coordinate (bottom center)
+      popupAnchor: [0, -32] // Where the popup should open relative to the anchor
+    };
+
+    const paddleIcon = L.icon({ iconUrl: 'canoe.png', ...iconSettings });
     const map = L.map('map').setView([0, 0], 10); 
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -144,7 +152,7 @@
               return L.marker(latlng, {
                 icon: L.divIcon({
                   html: markerHtml,
-                  className: '',
+                  className: 'leaflet-div-icon',
                   iconSize: [30, 42],
                   iconAnchor: [15, 42],
                   popupAnchor: [0, -35]
